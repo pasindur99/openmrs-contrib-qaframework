@@ -29,3 +29,10 @@ jobs:
         run: npx openmrs@next start --backend http://localhost:8080 --port 8081 &
       - name: Run patient login workflow tests
         run: npm run refApp3Login
+      - name: Archive server logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: openmrs.log
+          path: |
+            /$(pwd)/openmrs/openmrs.log
+
