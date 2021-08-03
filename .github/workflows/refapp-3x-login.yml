@@ -41,7 +41,7 @@ jobs:
         with:
           repository: ${{github.repository}}
       - name: Wait for Openmrs instance to start
-        run: while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:8080/openmrs/login.htm)" != "200" ]]; do sleep 1; done
+        run: while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:8080/openmrs/ws/rest/v1/session)" != "200" ]]; do echo "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:8080/openmrs/ws/rest/v1/session)"; sleep 10; done
       - name: Using Node.js
         uses: actions/setup-node@v1
         with:
@@ -50,11 +50,14 @@ jobs:
         run: npm install
       - name: Run RefApp 3.x frontend
         run: npx openmrs@next start --backend http://localhost:8080 --port 8081 &
-      - name: Test openmrs instance and the proxy
-        run: |
-          curl http://localhost:8080
-          sleep 30
-          curl http://localhost:8081
+      - name: Test openmrs instance
+        run: curl http://localhost:8080/openmrs/login.htm
+      - name: Test REST API
+        run: curl http://localhost:8080/openmrs/ws/rest/v1/session
+      - name: Test frontend
+        run: curl http://localhost:8081
+      - name: Test proxy
+        run: curl http://localhost:8081/openmrs/ws/rest/v1/session
       - name: Run patient login workflow tests
         run: npm run refApp3Login
 
