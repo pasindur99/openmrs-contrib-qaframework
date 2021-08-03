@@ -61,6 +61,7 @@ jobs:
       - name: Run patient login workflow tests
         run: npm run refApp3Login
       - name: Archive server logs
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
           name: openmrs.log
