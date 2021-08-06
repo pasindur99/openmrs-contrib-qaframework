@@ -22,6 +22,7 @@ jobs:
           - "3306:3306"
         volumes:
           - ${{ github.workspace }}/docker/mysql-config.cnf:/etc/mysql/conf.d/custom.cnf
+          - $(pwd)/mysql-log:/var/log/mysql
       openmrs-referenceapplication:
         image: openmrs/openmrs-reference-application-distro:demo
         ports:
@@ -68,7 +69,14 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: openmrs.log
+          name: openmrs-logs
           path: |
             /$(pwd)/openmrs/openmrs.log
+      - name: Archive mysql logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: mysql-logs
+          path: |
+            /$(pwd)/mysql-log
 
