@@ -22,7 +22,7 @@ jobs:
           - "3306:3306"
         volumes:
           - ${{ github.workspace }}/docker/mysql-config.cnf:/etc/mysql/conf.d/custom.cnf
-          - $(pwd)/mysql-log:/var/log/mysql
+          - /$(pwd)/mysql-log:/var/log/mysql
       openmrs-referenceapplication:
         image: openmrs/openmrs-reference-application-distro:demo
         ports:
