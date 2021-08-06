@@ -22,7 +22,7 @@ jobs:
           - "3306:3306"
         volumes:
           - ${{ github.workspace }}/docker/mysql-config.cnf:/etc/mysql/conf.d/custom.cnf
-          - /$(pwd)/mysql-log:/var/log/mysql
+          #- /$(pwd)/mysql-log:/var/log/mysql
       openmrs-referenceapplication:
         image: openmrs/openmrs-reference-application-distro:demo
         ports:
@@ -65,18 +65,21 @@ jobs:
         run: curl http://localhost:8081/openmrs/ws/rest/v1/session
       - name: Run patient login workflow tests
         run: npm run refApp3Login
-      - name: Archive server logs
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: openmrs-logs
-          path: |
-            /$(pwd)/openmrs/openmrs.log
-      - name: Archive mysql logs
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: mysql-logs
-          path: |
-            /$(pwd)/mysql-log
+      - name: Dump docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v1
+      #- name: Archive server logs
+        #if: ${{ always() }}
+        #uses: actions/upload-artifact@v2
+        #with:
+          #name: openmrs-logs
+          #path: |
+            #/$(pwd)/openmrs/openmrs.log
+      #- name: Archive mysql logs
+        #if: ${{ always() }}
+        #uses: actions/upload-artifact@v2
+        #with:
+          #name: mysql-logs
+          #path: |
+            #/$(pwd)/mysql-log
 
