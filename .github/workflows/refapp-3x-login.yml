@@ -38,6 +38,8 @@ jobs:
           - /$(pwd)/openmrs:/usr/local/tomcat/.OpenMRS
           - /$(pwd)/activemq-data:/usr/local/tomcat/.OpenMRS/activemq-data
     steps:
+      - name: Allow workflow to delete old files even if they are mounted
+        run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - name: Checkout qaframework
         uses: actions/checkout@master
         with:
