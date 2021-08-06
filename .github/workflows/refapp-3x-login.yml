@@ -33,7 +33,7 @@ jobs:
           DB_AUTO_UPDATE: 'false'
           MODULE_WEB_ADMIN: 'false'
         volumes:
-          - openmrs-referenceapplication-data:/usr/local/tomcat/.OpenMRS
+          - /$(pwd)/openmrs:/usr/local/tomcat/.OpenMRS
           - /$(pwd)/activemq-data:/usr/local/tomcat/.OpenMRS/activemq-data
     steps:
       - name: Checkout qaframework
